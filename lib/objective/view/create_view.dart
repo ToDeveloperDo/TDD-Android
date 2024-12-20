@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tdd/calendar/view/calendar_view.dart';
+import 'package:tdd/user/view/profile_view.dart';
 
 import '../../main/provider/navigatior_provider.dart';
+import 'objective_view.dart';
 import 'objective_flow_view.dart';
 
 class CreateScreen extends ConsumerStatefulWidget {
-  static String get routeName => "createpage";
+  static String get routeName => 'createpage';
   const CreateScreen({super.key});
+
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _CreateScreenState();
 }
@@ -27,9 +30,16 @@ class _CreateScreenState extends ConsumerState<CreateScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: GestureDetector(
               onTap: () {
-                Navigator.pop(context);
+                ref.read(navigationIndexProvider.notifier).state = 2; // 목표 설정 인덱스 설정
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ObjectiveScreen(),
+                  ),
+                      (route) => false, // 모든 이전 스택 제거
+                );
               },
-                child: const Icon(Icons.arrow_back, color: Colors.black),
+              child: const Icon(Icons.arrow_back, color: Colors.black),
             ),
           ),
           const Spacer(),
@@ -84,15 +94,43 @@ class _CreateScreenState extends ConsumerState<CreateScreen> {
         onTap: (index) {
           ref.read(navigationIndexProvider.notifier).state = index;
 
-          // 해당 화면으로 이동
-          if (index == 0) {
-            Navigator.pushNamed(context, '/mainpage');
-          } else if (index == 1) {
-            Navigator.pushNamed(context, '/calendarpage');
-          } else if (index == 2) {
-            Navigator.pushNamed(context, '/objectivepage');
-          } else if (index == 3) {
-            Navigator.pushNamed(context, '/profilepage');
+          switch (index) {
+            case 0: // 캘린더
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => CalendarScreen(),
+                ),
+                    (route) => false,
+              );
+              break;
+            case 1: // 탐색
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ObjectiveScreen(),
+                ),
+                    (route) => false,
+              );
+              break;
+            case 2: // 목표 설정
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => CreateScreen(),
+                ),
+                    (route) => false,
+              );
+              break;
+            case 3: // 내 정보
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ProfileScreen(),
+                ),
+                    (route) => false,
+              );
+              break;
           }
         },
         items: const [

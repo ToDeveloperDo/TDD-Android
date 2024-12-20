@@ -97,135 +97,137 @@ class _MainPageState extends ConsumerState<MainScreen> {
           index: currentIndex,
           children: _screens,
         ),
-        floatingActionButton: _selectedIndex == 0
-            ? FloatingActionButton(
-          backgroundColor: const Color(0xFF8393AD),
-          shape: const CircleBorder(),
-          elevation: 0,
-          child: SvgPicture.asset(
-            'assets/images/plus_button.svg',
-            width: 24,
-          ),
-          onPressed: () {
-            showModalBottomSheet(
-              context: context,
-              isScrollControlled: true,
-              builder: (BuildContext context) {
-                return SingleChildScrollView(
-                  padding: EdgeInsets.only(
-                    bottom: MediaQuery.of(context).viewInsets.bottom,
-                  ),
-                  child: Container(
-                    padding: const EdgeInsets.all(20),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "${_selectedDate.year}년 ${_selectedDate.month.toString().padLeft(2, '0')}월 ${_selectedDate.day.toString().padLeft(2, '0')}일",
-                          style: const TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
+          floatingActionButton: currentIndex == 0
+              ? FloatingActionButton(
+            heroTag: 'unique_calendar_fab', // 고유 태그 설정
+            backgroundColor: const Color(0xFF8393AD),
+            shape: const CircleBorder(),
+            elevation: 0,
+            child: SvgPicture.asset(
+              'assets/images/plus_button.svg',
+              width: 24,
+            ),
+            onPressed: () {
+              showModalBottomSheet(
+                context: context,
+                isScrollControlled: true,
+                builder: (BuildContext context) {
+                  return SingleChildScrollView(
+                    padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom,
+                    ),
+                    child: Container(
+                      padding: const EdgeInsets.all(20),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "${_selectedDate.year}년 ${_selectedDate.month.toString().padLeft(2, '0')}월 ${_selectedDate.day.toString().padLeft(2, '0')}일",
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: 10),
-                        TextField(
-                          controller: _todoController,
-                          focusNode: _todoFocusNode,
-                          autofocus: true,
-                          decoration: const InputDecoration(
-                            hintText: '어떤 일을 하시겠습니까?',
-                            hintStyle: TextStyle(color: Colors.grey),
-                            border: UnderlineInputBorder(),
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        TextField(
-                          controller: _descriptionController,
-                          focusNode: _descriptionFocusNode,
-                          decoration: const InputDecoration(
-                            hintText: '설명을 입력해주세요',
-                            hintStyle: TextStyle(color: Colors.grey),
-                            border: UnderlineInputBorder(),
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        if (_tag != null)
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              GestureDetector(
-                                onTap: _removeTag,
-                                child: Container(
-                                  margin: const EdgeInsets.all(8),
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8, vertical: 2),
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xFFF9F9F9),
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      const Icon(
-                                        Icons.local_offer,
-                                        color: Color(0xffD7BDFF),
-                                      ),
-                                      const SizedBox(width: 4),
-                                      Text(_tag!),
-                                      const SizedBox(width: 4),
-                                      const Icon(Icons.close, size: 16),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                height: 1,
-                                color: Colors.grey.withOpacity(0.3), // 구분선 추가
-                              ),
-                            ],
-                          )
-                        else
+                          const SizedBox(height: 10),
                           TextField(
-                            controller: _tagController,
-                            focusNode: _tagFocusNode,
+                            controller: _todoController,
+                            focusNode: _todoFocusNode,
+                            autofocus: true,
                             decoration: const InputDecoration(
-                              hintText: '태그를 입력해주세요',
+                              hintText: '어떤 일을 하시겠습니까?',
                               hintStyle: TextStyle(color: Colors.grey),
                               border: UnderlineInputBorder(),
                             ),
-                            onSubmitted: (value) {
-                              if (value.isNotEmpty) {
-                                _convertToTag();
-                              }
-                            },
                           ),
-                        const SizedBox(height: 5),
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: FloatingActionButton(
-                            shape: const CircleBorder(),
-                            mini: true,
-                            backgroundColor: const Color(0xFF8393AD),
-                            child: const Icon(
-                              Icons.arrow_forward,
-                              color: Colors.white,
-                              size: 20,
+                          const SizedBox(height: 10),
+                          TextField(
+                            controller: _descriptionController,
+                            focusNode: _descriptionFocusNode,
+                            decoration: const InputDecoration(
+                              hintText: '설명을 입력해주세요',
+                              hintStyle: TextStyle(color: Colors.grey),
+                              border: UnderlineInputBorder(),
                             ),
-                            onPressed: () {
-                              // TODO => 할 일 등록 백엔드 API연동
-                            },
                           ),
-                        ),
-                      ],
+                          const SizedBox(height: 10),
+                          if (_tag != null)
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                GestureDetector(
+                                  onTap: _removeTag,
+                                  child: Container(
+                                    margin: const EdgeInsets.all(8),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8, vertical: 2),
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xFFF9F9F9),
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        const Icon(
+                                          Icons.local_offer,
+                                          color: Color(0xffD7BDFF),
+                                        ),
+                                        const SizedBox(width: 4),
+                                        Text(_tag!),
+                                        const SizedBox(width: 4),
+                                        const Icon(Icons.close, size: 16),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  height: 1,
+                                  color: Colors.grey.withOpacity(0.3), // 구분선 추가
+                                ),
+                              ],
+                            )
+                          else
+                            TextField(
+                              controller: _tagController,
+                              focusNode: _tagFocusNode,
+                              decoration: const InputDecoration(
+                                hintText: '태그를 입력해주세요',
+                                hintStyle: TextStyle(color: Colors.grey),
+                                border: UnderlineInputBorder(),
+                              ),
+                              onSubmitted: (value) {
+                                if (value.isNotEmpty) {
+                                  _convertToTag();
+                                }
+                              },
+                            ),
+                          const SizedBox(height: 5),
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: FloatingActionButton(
+                              heroTag: 'unique_tag_button',
+                              shape: const CircleBorder(),
+                              mini: true,
+                              backgroundColor: const Color(0xFF8393AD),
+                              child: const Icon(
+                                Icons.arrow_forward,
+                                color: Colors.white,
+                                size: 20,
+                              ),
+                              onPressed: () {
+                                // TODO: 할 일 등록 로직 추가
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              },
-            );
-          },
-        )
-            : null, // 캘린더 화면이 아니면 FloatingActionButton 숨김
+                  );
+                },
+              );
+            },
+          )
+              : null, // 캘린더 화면이 아닌 경우 숨김숨김
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         bottomNavigationBar: Container(
           decoration: BoxDecoration(
